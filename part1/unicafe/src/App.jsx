@@ -1,7 +1,6 @@
 import { useState } from "react"
 
-const Heading = (props) => {
-  const text = props.text
+const Heading = ({text}) => {
 
   return (
     <div>
@@ -10,9 +9,7 @@ const Heading = (props) => {
   )
 }
 
-const Button = (props) => {
-  const onClick = props.onClick
-  const text = props.text
+const Button = ({onClick, text}) => {
 
   return (
     <button onClick={onClick}>{text}</button>
