@@ -1,46 +1,25 @@
 import { useState } from "react"
 
-const Heading = ({text}) => {
+const Heading = ({text}) => (<div><h1>{text}</h1></div>)
 
-  return (
-    <div>
-    <h1>{text}</h1>
-    </div>
-  )
-}
 
-const Button = ({onClick, text}) => {
+const Button = ({onClick, text}) => (<button onClick={onClick}>{text}</button>)
 
-  return (
-    <button onClick={onClick}>{text}</button>
-  )
-}
 
 const App = () => {
   const [ good, setGood ] = useState(0)
   const [ neutral, setNeutral ] = useState(0)
   const [ bad, setBad ] = useState(0)
 
-  const handleGood = () => {
-    console.log('good before value', good)
-    const updatedGood = good + 1
-    setGood(updatedGood)
-    console.log('good after value', updatedGood)
-  }
+  const all = good + neutral + bad
+  const average = all > 0 ? (good - bad) / all : 0
+  const positive = all > 0 ? (good / all) * 100 : 0
 
-  const handleNeutral = () => {
-    console.log('neutral before value', neutral)
-    const updatedNeutral = neutral + 1
-    setNeutral(updatedNeutral)
-    console.log('neutral after value', updatedNeutral)
-  }
+  const handleGood = () => setGood(g => g + 1)
+  
+  const handleNeutral = () => setNeutral(n => n + 1)
 
-    const handleBad = () => {
-      console.log('bad before value', bad)
-      const updatedBad = bad + 1
-      setBad(updatedBad)
-      console.log('bad after value', updatedBad)
-    }
+  const handleBad = () => setBad(b => b + 1)
 
   return(
     <div>
@@ -49,11 +28,20 @@ const App = () => {
       <Button onClick={handleNeutral} text='neutral' />
       <Button onClick={handleBad} text='bad' />
       <Heading text='statistics' />
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
+      <span>good {good}</span> 
+      <br /> 
+      <span>neutral {neutral}</span> 
+      <br /> 
+      <span>bad {bad}</span> 
+      <br /> 
+      <span>all {all}</span> 
+      <br /> 
+      <span>average {average}</span> 
+      <br /> 
+      <span>positive {positive} %</span>
     </div>
   )
 }
 
 export default App
+
