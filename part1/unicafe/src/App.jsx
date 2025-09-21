@@ -5,6 +5,8 @@ const Heading = ({text}) => (<div><h1>{text}</h1></div>)
 
 const Button = ({onClick, text}) => (<button onClick={onClick}>{text}</button>)
 
+const StatisticLine = ({text, value}) => (<div> {text} {value}</div>)
+
 const Statistics = ({good, neutral, bad, all, average, positive}) => {
 
   return (
@@ -17,17 +19,13 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
           <div>No feedback given</div>
         ) : (
           <div>
-          <span>good {good}</span> 
-          <br /> 
-          <span>neutral {neutral}</span> 
-          <br /> 
-          <span>bad {bad}</span> 
-          <br /> 
-          <span>all {all}</span> 
-          <br /> 
-          <span>average {average}</span> 
-          <br /> 
-          <span>positive {positive} %</span>
+            <StatisticLine text='good' value={good} />
+            <StatisticLine text='neutral' value={neutral} />
+            <StatisticLine text='bad' value={bad} />
+            <StatisticLine text='all' value={all} />
+            <StatisticLine text='average' value={average} />
+            <StatisticLine text='positive' value={positive} />
+            
           </div>
         )
       }
@@ -42,7 +40,7 @@ const App = () => {
 
   const all = good + neutral + bad
   const average = all > 0 ? (good - bad) / all : 0
-  const positive = all > 0 ? (good / all) * 100 : 0
+  const positive = all > 0 ? (good / all) * 100 + ' %': 0 + ' %'
 
   const handleGood = () => setGood(g => g + 1)
   
