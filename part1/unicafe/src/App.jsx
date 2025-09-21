@@ -6,20 +6,31 @@ const Heading = ({text}) => (<div><h1>{text}</h1></div>)
 const Button = ({onClick, text}) => (<button onClick={onClick}>{text}</button>)
 
 const Statistics = ({good, neutral, bad, all, average, positive}) => {
+
   return (
     <div>
       <Heading text='statistics' />
-      <span>good {good}</span> 
-      <br /> 
-      <span>neutral {neutral}</span> 
-      <br /> 
-      <span>bad {bad}</span> 
-      <br /> 
-      <span>all {all}</span> 
-      <br /> 
-      <span>average {average}</span> 
-      <br /> 
-      <span>positive {positive} %</span>
+
+      {
+      all === 0 ? (
+
+          <div>No feedback given</div>
+        ) : (
+          <div>
+          <span>good {good}</span> 
+          <br /> 
+          <span>neutral {neutral}</span> 
+          <br /> 
+          <span>bad {bad}</span> 
+          <br /> 
+          <span>all {all}</span> 
+          <br /> 
+          <span>average {average}</span> 
+          <br /> 
+          <span>positive {positive} %</span>
+          </div>
+        )
+      }
     </div>
   )
 }
