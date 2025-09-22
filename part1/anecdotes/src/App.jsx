@@ -25,6 +25,10 @@ const App = () => {
 
   console.log(votes)
 
+  const maxVotes = Math.max(...votes)
+  console.log('max votes', maxVotes)
+  const maxIndex = votes.indexOf(maxVotes)
+  console.log('Index of max vote', maxIndex)
 
   const handleSelected = () => {
     const length = Math.floor(Math.random() * anecdotes.length)
@@ -44,9 +48,13 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
       <Button vote={handleVote} text1={'vote'} anecdotes={handleSelected} text2={'next anecdote'}/>
+      <h1>Anecdote with most vote</h1>
+      <div>{anecdotes[maxIndex]}</div>
+      <div>has {maxVotes} votes</div>
     </div>
   )
 }
