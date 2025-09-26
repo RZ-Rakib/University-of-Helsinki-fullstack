@@ -1,5 +1,5 @@
 const Header = ({course}) => {
-  console.log(course.name);
+  console.log('Header: ', course.name);
 
   return (
     <div>
@@ -9,7 +9,7 @@ const Header = ({course}) => {
 }
 
 const Part = ({parts}) => {
-console.log({parts});
+console.log('parts: ',{parts});
 
   return (
     <div>
@@ -19,22 +19,36 @@ console.log({parts});
 }
 
 const Content = ({course})=> {
-  console.log({course});
+  console.log('Content: ', course.parts);
 
   return (
     <div>
       <Part parts={course.parts[0]}/>
       <Part parts={course.parts[1]}/>
       <Part parts={course.parts[2]}/>
+      <Part parts={course.parts[3]}/>
     </div>
     )
 }
+ const Total= ({parts}) => {
+  const total = parts.reduce((sum, part) => {
+    return sum += part.exercises
+  }, 0)
+  console.log('Total exercises:', total);
+  
+  return (
+    <div>
+      <h4>total of {total} exercises</h4>
+    </div>
+  )
+ }
 
 const Course = ({course}) => {
   return (
     <div>
       <Header course = {course} />
       <Content course={course} />
+      <Total parts= {course.parts} />
     </div>
   )
 }
@@ -57,6 +71,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
