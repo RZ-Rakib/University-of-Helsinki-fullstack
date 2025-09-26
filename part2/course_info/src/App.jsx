@@ -32,9 +32,10 @@ const Content = ({course})=> {
 }
  const Total= ({parts}) => {
   const total = parts.reduce((sum, part) => {
+    console.log('what is happening ', sum, part)
     return sum += part.exercises
   }, 0)
-  console.log('Total exercises:', total);
+  console.log('Total exercises:', total)
   
   return (
     <div>
