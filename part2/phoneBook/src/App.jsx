@@ -12,7 +12,6 @@ const App = () => {
     event.preventDefault()
     const newperson = {
       name: newName,
-      id: persons.length + 1
     }
     setPerson(persons.concat(newperson))
     setNewName('')
@@ -21,7 +20,7 @@ const App = () => {
   const handleNewName = (event) => {
     setNewName(event.target.value)
   }
-  
+
   return (
     <div>
       <h2>Phonebook</h2>
