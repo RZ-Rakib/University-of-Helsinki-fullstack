@@ -3,14 +3,23 @@ import { useState } from "react"
 const App = () => {
   const [persons, setPerson] = useState([
     {
-      name: 'Rakib zaman'
+      name: 'Rakib zaman',
+      id: 0,
     }
   ])
   const [newName, setNewName] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
+    const trimmedName = newName.trim()
+
+    if (persons.some(person => person.name.toLowerCase() === trimmedName.toLowerCase())) {
+      alert(`${trimmedName} is already added to phonebook`)
+      return
+    }
+
     const newperson = {
+      id: persons.length + 1,
       name: newName,
     }
     setPerson(persons.concat(newperson))
@@ -35,7 +44,7 @@ const App = () => {
       <h2>Numbers</h2>
       <div>
         {persons.map(person => 
-          <li key={person.name}> {person.name}</li>
+          <li key={person.id ?? person.name}> {person.name}</li>
         )}
       </div>
     </div>
