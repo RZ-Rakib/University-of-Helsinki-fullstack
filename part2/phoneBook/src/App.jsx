@@ -4,13 +4,16 @@ const App = () => {
   const [persons, setPerson] = useState([
     {
       name: 'Rakib zaman',
+      number: 12345678,
       id: 0,
     }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
+
     const trimmedName = newName.trim()
 
     if (persons.some(person => person.name.toLowerCase() === trimmedName.toLowerCase())) {
@@ -19,15 +22,20 @@ const App = () => {
     }
 
     const newperson = {
-      id: persons.length + 1,
       name: newName,
+      number: newNumber,
+      id: persons.length + 1,
     }
     setPerson(persons.concat(newperson))
     setNewName('')
+    setNewNumber('')
   }
 
   const handleNewName = (event) => {
     setNewName(event.target.value)
+  }
+  const handleNewNumber = (event) => {
+    setNewNumber(event.target.value)
   }
 
   return (
@@ -38,13 +46,16 @@ const App = () => {
         name: <input value={newName} onChange={handleNewName} />
         </div>
         <div>
+        number: <input value={newNumber} onChange={handleNewNumber} />
+        </div>
+        <div>
         <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
       <div>
         {persons.map(person => 
-          <li key={person.id ?? person.name}> {person.name}</li>
+          <li key={person.id ?? person.name}> {person.name} {person.number}</li>
         )}
       </div>
     </div>
