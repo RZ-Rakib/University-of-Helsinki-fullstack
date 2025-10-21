@@ -1,3 +1,8 @@
+/**
+ * Filter Component
+ * @prop {string} searchName - The current search term for filering names
+ * @prop {function} handleSearchName - event handler for updating the current search term
+ */
 const Filter = ({ searchName, handleSearchName }) => {
   return (
     <div>

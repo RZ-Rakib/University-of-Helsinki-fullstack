@@ -1,3 +1,11 @@
+/**
+ * PersonForm Component
+ * @prop {function} addPerson - event handler for adding a new person
+ * @prop {string} newName - The current value of the name input filed
+ * @prop {function} hnadleNewName - event handler for updating the name input field
+ * @prop {string} nawNUmber - The current value of the number input field
+ * @prop {function} handleNewName - eent handler for updating the number input field
+ */
 const PersonForm = ({ addPerson, newName, handleNewName, newNumber, handleNewNumber }) => {
   return (
     <form onSubmit={addPerson}>

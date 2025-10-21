@@ -1,3 +1,7 @@
+/**
+ * PersonItem Component
+ * @prop {Array} filteredPersons - Array of person object to display in the list
+ */
 const PersonItem = ({ filteredPersons }) => {
   return (
     <div>
