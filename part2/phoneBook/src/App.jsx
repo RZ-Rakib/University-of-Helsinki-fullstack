@@ -5,7 +5,7 @@ import PersonItem from "./components/PersonItem"
 import userServices from "./services/users.js"
 
 const App = () => {
-  const [persons, setPerson] = useState([])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
@@ -14,10 +14,10 @@ const App = () => {
     userServices
       .getAll()
       .then(allObjects => {
-        setPerson(allObjects)
+        setPersons(allObjects)
       })
-      .then(error => {
-        console.log("error ==> ", error);
+      .catch(error => {
+        console.error("Something went wrong to fetch the data from the server", error);
       })
   }
   useEffect(hook, [])
@@ -25,14 +25,13 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const trimmedName = newName.trim().toLowerCase()
-    const trimmedNumber = newNumber.trim().toLowerCase()
+    const normalize = str => str.trim().toLowerCase()
 
-    if (persons.some(person => person.name.toLowerCase() === trimmedName)) {
+    if (persons.some(person => normalize(person.name) === normalize(newName))) {
       alert(`${newName} is already added to phonebook`)
       return
     }
-    if (persons.some(person => person.number === trimmedNumber)) {
+    if (persons.some(person => normalize(person.number) === normalize(newNumber))) {
       alert(`${newNumber} is already added to phonebook`)
       return
     }
@@ -44,12 +43,12 @@ const App = () => {
     userServices
       .create(newPerson)
       .then(newObject => {
-        setPerson(prev => prev.concat(newObject))
+        setPersons(prev => prev.concat(newObject))
         setNewName('')
         setNewNumber('')
       })
       .catch(error => {
-        console.log("error ==> ", error);
+        console.error("", error);
       })
   }
 
@@ -58,6 +57,20 @@ const App = () => {
   const handleNewNumber = (event) => setNewNumber(event.target.value)
 
   const handleSearchName = (event) => setSearchName(event.target.value)
+
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`))
+      userServices
+        .remove(person.id)
+        .then(removedObject => {
+          setPersons(prev => prev.filter(p => p.id !== person.id))
+          console.log("Deleted", removedObject);
+        })
+        .catch(error => {
+          console.error(`${person.name} is already deleted from the server. ${error}`)
+        })
+  }
 
   const filteredPersons = persons.filter(p => p.name.toLowerCase().includes(searchName.toLowerCase()))
 
@@ -74,7 +87,12 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <PersonItem filteredPersons={filteredPersons} />
+      {filteredPersons.map(person => {
+        console.log("person ==> ", person);
+        return (
+          <PersonItem key={person.id} name={person.name} number={person.number} handleDelete={() => handleDelete(person)} />
+        )
+      })}
     </div>
   )
 }

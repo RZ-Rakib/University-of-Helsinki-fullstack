@@ -1,13 +1,15 @@
 /**
  * PersonItem Component
- * @prop {Array} filteredPersons - Array of person object to display in the list
+ * @prop {string} name - The name of the person
+ * @prop {string} number - The phone number of the person
+ * @prop {function} handleDelete - event handler for deleting the person
  */
-const PersonItem = ({ filteredPersons }) => {
+const PersonItem = ({ name, number, handleDelete }) => {
   return (
     <div>
-      {filteredPersons.map(person =>
-        <li key={person.id ?? person.name}> {person.name} {person.number}</li>
-      )}
+      <li> {name} {number}
+        {' '}<button onClick={handleDelete}>delete</button>
+      </li>
     </div>
   )
 }
