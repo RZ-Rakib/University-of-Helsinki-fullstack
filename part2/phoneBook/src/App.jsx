@@ -26,16 +26,28 @@ const App = () => {
     event.preventDefault()
 
     const normalize = str => str.trim().toLowerCase()
+    const existingPerson = persons.find(person => normalize(person.name) === normalize(newName))
 
-    if (persons.some(person => normalize(person.name) === normalize(newName))) {
-      alert(`${newName} is already added to phonebook`)
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new number`)) {
+        const newPersonObject = { ...existingPerson, number: newNumber }
+
+        userServices
+          .update(existingPerson.id, newPersonObject)
+          .then(returnedObject => {
+            console.log("returnedObject ==> ", returnedObject);
+            setPersons(prev =>
+              prev.map(person => person.id === existingPerson.id ? returnedObject : person)
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            console.error(`Failed to update ${newName}`, error)
+          })
+      }
       return
     }
-    if (persons.some(person => normalize(person.number) === normalize(newNumber))) {
-      alert(`${newNumber} is already added to phonebook`)
-      return
-    }
-
     const newPerson = {
       name: newName,
       number: newNumber,
@@ -88,7 +100,6 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {filteredPersons.map(person => {
-        console.log("person ==> ", person);
         return (
           <PersonItem key={person.id} name={person.name} number={person.number} handleDelete={() => handleDelete(person)} />
         )
