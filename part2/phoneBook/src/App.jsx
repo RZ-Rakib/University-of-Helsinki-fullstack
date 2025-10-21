@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import PersonItem from "./components/PersonItem"
+import userServices from "./services/users.js"
 
 const App = () => {
   const [persons, setPerson] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   const hook = () => {
-    axios
-      .get("http://localhost:3001/users")
-      .then(response => {
-        setPerson(response.data)
+    userServices
+      .getAll()
+      .then(allObjects => {
+        setPerson(allObjects)
       })
       .then(error => {
         console.log("error ==> ", error);
@@ -41,10 +41,10 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    axios
-      .post("http://localhost:3001/users", newPerson)
-      .then(response => {
-        setPerson(prev => prev.concat(response.data))
+    userServices
+      .create(newPerson)
+      .then(newObject => {
+        setPerson(prev => prev.concat(newObject))
         setNewName('')
         setNewNumber('')
       })
