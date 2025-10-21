@@ -26,20 +26,31 @@ const App = () => {
     event.preventDefault()
 
     const trimmedName = newName.trim().toLowerCase()
+    const trimmedNumber = newNumber.trim().toLowerCase()
 
     if (persons.some(person => person.name.toLowerCase() === trimmedName)) {
       alert(`${newName} is already added to phonebook`)
       return
     }
+    if (persons.some(person => person.number === trimmedNumber)) {
+      alert(`${newNumber} is already added to phonebook`)
+      return
+    }
 
-    const newperson = {
+    const newPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     }
-    setPerson(persons.concat(newperson))
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post("http://localhost:3001/users", newPerson)
+      .then(response => {
+        setPerson(prev => prev.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        console.log("error ==> ", error);
+      })
   }
 
   const handleNewName = (event) => setNewName(event.target.value)
