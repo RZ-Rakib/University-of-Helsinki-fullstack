@@ -3,12 +3,14 @@ import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import PersonItem from "./components/PersonItem"
 import userServices from "./services/users.js"
+import Notification from "./components/Notification.jsx"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const hook = () => {
     userServices
@@ -35,12 +37,15 @@ const App = () => {
         userServices
           .update(existingPerson.id, newPersonObject)
           .then(returnedObject => {
-            console.log("returnedObject ==> ", returnedObject);
             setPersons(prev =>
               prev.map(person => person.id === existingPerson.id ? returnedObject : person)
             )
             setNewName('')
             setNewNumber('')
+            setNotificationMessage(`Updated ${returnedObject.name}`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 3000);
           })
           .catch(error => {
             console.error(`Failed to update ${newName}`, error)
@@ -58,9 +63,13 @@ const App = () => {
         setPersons(prev => prev.concat(newObject))
         setNewName('')
         setNewNumber('')
+        setNotificationMessage(`Added ${newObject.name}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 3000);
       })
       .catch(error => {
-        console.error("", error);
+        console.error("Failed to create the new person object", error);
       })
   }
 
@@ -89,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <h2>Add a new</h2>
       <PersonForm
@@ -101,7 +111,11 @@ const App = () => {
       <h2>Numbers</h2>
       {filteredPersons.map(person => {
         return (
-          <PersonItem key={person.id} name={person.name} number={person.number} handleDelete={() => handleDelete(person)} />
+          <PersonItem
+            key={person.id}
+            name={person.name}
+            number={person.number}
+            handleDelete={() => handleDelete(person)} />
         )
       })}
     </div>
