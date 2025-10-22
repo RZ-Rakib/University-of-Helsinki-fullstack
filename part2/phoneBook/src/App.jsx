@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState({ message: null, type: null })
 
   const hook = () => {
     userServices
@@ -19,7 +19,10 @@ const App = () => {
         setPersons(allObjects)
       })
       .catch(error => {
-        console.error("Something went wrong to fetch the data from the server", error);
+        setNotificationMessage({ message: 'Server connection is lost', type: 'error' })
+        setTimeout(() => {
+          setNotificationMessage({ message: 'null', type: 'null' })
+        }, 3000);
       })
   }
   useEffect(hook, [])
@@ -42,13 +45,16 @@ const App = () => {
             )
             setNewName('')
             setNewNumber('')
-            setNotificationMessage(`Updated ${returnedObject.name}`)
+            setNotificationMessage({ message: `Updated ${returnedObject.name}`, type: 'success' })
             setTimeout(() => {
-              setNotificationMessage(null)
+              setNotificationMessage({ message: 'null', type: 'null' })
             }, 3000);
           })
           .catch(error => {
-            console.error(`Failed to update ${newName}`, error)
+            setNotificationMessage({ message: `${newPersonObject.name} is already removed from the server`, type: 'error' })
+            setTimeout(() => {
+              setNotificationMessage({ message: 'null', type: 'null' })
+            }, 3000);
           })
       }
       return
@@ -63,13 +69,16 @@ const App = () => {
         setPersons(prev => prev.concat(newObject))
         setNewName('')
         setNewNumber('')
-        setNotificationMessage(`Added ${newObject.name}`)
+        setNotificationMessage({ message: `Added ${newObject.name}`, type: 'success' })
         setTimeout(() => {
-          setNotificationMessage(null)
+          setNotificationMessage({ message: null, type: null })
         }, 3000);
       })
       .catch(error => {
-        console.error("Failed to create the new person object", error);
+        setNotificationMessage({ message: `Failed to create ${newPerson.name}`, type: 'error' })
+        setTimeout(() => {
+          setNotificationMessage({ message: 'null', type: 'null' })
+        }, 3000);
       })
   }
 
@@ -86,10 +95,17 @@ const App = () => {
         .remove(person.id)
         .then(removedObject => {
           setPersons(prev => prev.filter(p => p.id !== person.id))
-          console.log("Deleted", removedObject);
+          setNotificationMessage({ message: `${removedObject.name} is successfully removed `, type: 'success' })
+          setTimeout(() => {
+            setNotificationMessage({ message: 'null', type: 'null' })
+          }, 3000);
         })
         .catch(error => {
-          console.error(`${person.name} is already deleted from the server. ${error}`)
+          setPersons(prev => prev.filter(p => p.id !== person.id))
+          setNotificationMessage({ message: `${person.name} is already removed from the server`, type: 'error' })
+          setTimeout(() => {
+            setNotificationMessage({ message: 'null', type: 'null' })
+          }, 3000);
         })
   }
 
@@ -98,7 +114,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage.message} type={notificationMessage.type} />
       <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <h2>Add a new</h2>
       <PersonForm
