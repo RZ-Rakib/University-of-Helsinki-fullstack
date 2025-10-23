@@ -100,13 +100,13 @@ const App = () => {
             setNotificationMessage({ message: 'null', type: 'null' })
           }, 3000);
         })
-        .catch(error => {
-          setPersons(prev => prev.filter(p => p.id !== person.id))
-          setNotificationMessage({ message: `${person.name} is already removed from the server`, type: 'error' })
-          setTimeout(() => {
-            setNotificationMessage({ message: 'null', type: 'null' })
-          }, 3000);
-        })
+    setPersons(prev => prev.filter(p => p.id !== person.id))
+      .catch(error => {
+        setNotificationMessage({ message: `${person.name} is already removed from the server`, type: 'error' })
+        setTimeout(() => {
+          setNotificationMessage({ message: 'null', type: 'null' })
+        }, 3000);
+      })
   }
 
   const filteredPersons = persons.filter(p => p.name.toLowerCase().includes(searchName.toLowerCase()))
