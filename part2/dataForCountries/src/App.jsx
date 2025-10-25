@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Search from './components/Form'
+import countryService from './services/country'
 
 function App() {
   const [allCountryInfo, setAllCountryInfo] = useState([])
   const [searchCountry, setSearchCountry] = useState('')
 
   useEffect(() => {
-    axios
-      .get('https://studies.cs.helsinki.fi/restcountries/api/all')
-      .then(response => {
-        console.log("response ==> ", response.data);
-        setAllCountryInfo(response.data)
+    countryService
+      .getAllCountries()
+      .then(countries => {
+        console.log("response ==> ", countries);
+        setAllCountryInfo(countries)
       })
       .catch(error =>
         alert(`Failed to fetch data from server`, error)
