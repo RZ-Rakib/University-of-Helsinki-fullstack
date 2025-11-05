@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-const contacts = [
+let contacts = [
   {
     id: '1',
     name: 'Arto Hellas',
@@ -77,6 +77,67 @@ app.get('/api/persons/:id', (req, res) => {
       `'GET api/persons/:ID' - Failed to fetch data from server, ${error.message}`
     );
     res.status(500).end();
+  }
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      winston.warn(`'DELETE' api/persons/:id - ID is missing`);
+      return res.status(400).json({ error: 'ID missing' });
+    }
+
+    contacts = contacts.filter((n) => n.id !== id);
+    res.status(204).end();
+    winston.info(`'DELETE' api/persons/:id - person with ID ${id} deleted`);
+  } catch (error) {
+    res.status(500).end();
+    winston.error(
+      `'DELETE' api/persons/:id - Error deleting person with ID ${id} from server', ${error.message}`
+    );
+  }
+});
+
+const generatedID = (min, max) => {
+  const ceiledMin = Math.ceil(min);
+  const flooredMax = Math.floor(max);
+  return Math.floor(Math.random() * (flooredMax - ceiledMin) + ceiledMin);
+};
+app.post('/api/persons', (req, res) => {
+  try {
+    const { name, number } = req.body;
+    if (!name || !number) {
+      winston.warn(`'POST api/persons/' - Missing required fields`);
+      return res.status(400).json({ error: 'Missing name or number' });
+    }
+
+    const trimmer = (value) => {
+      return typeof value === 'string' ? value.trim().toLowerCase() : '';
+    };
+
+    const existingName = contacts.find(
+      (p) => trimmer(p.name) === trimmer(name)
+    );
+    if (existingName) {
+      winston.warn(`'POST api/persons/' - name:${name} must be unique`);
+      return res.status(400).json({ error: 'name must be unique' });
+    }
+
+    const newObject = {
+      id: generatedID(10000, 100000),
+      name: name,
+      number: number,
+    };
+    contacts = contacts.concat(newObject);
+
+    res.status(201).end();
+    winston.info(`'POST api/persons' - name:${name} is created sucessfully`);
+  } catch (error) {
+    res.status(500).end();
+    winston.error(
+      `'POST' api/persons - Failed to add name:${name} to server, ${error.message}`
+    );
   }
 });
 
