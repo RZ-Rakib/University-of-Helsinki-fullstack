@@ -38,6 +38,7 @@ app.get('/api/persons', (req, res) => {
     res.status(500).end();
   }
 });
+
 app.get('/info', (req, res) => {
   try {
     const countPersons = contacts.length;
@@ -51,6 +52,29 @@ app.get('/info', (req, res) => {
   } catch (error) {
     winston.error(
       `'GET /info' Failed to fetch data from server, ${error.message}`
+    );
+    res.status(500).end();
+  }
+});
+
+app.get('/api/persons/:id', (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      winston.warn(`'GET /api/persons/:id' - ID is missing`);
+      return res.status(400).json({ error: 'invalid id' });
+    }
+    const person = contacts.find((n) => n.id === id);
+    if (person) {
+      res.json(person);
+      winston.info(`'GET api/persons/:id' - person with ID ${id} found`);
+    } else {
+      winston.warn(`'GET api/person/:id' -  id ${id} is invalid`);
+      res.status(404).end();
+    }
+  } catch (error) {
+    winston.error(
+      `'GET api/persons/:ID' - Failed to fetch data from server, ${error.message}`
     );
     res.status(500).end();
   }
