@@ -1,5 +1,5 @@
 import { useState } from 'react'
-const Button = ({vote, anecdotes, text1, text2}) => {
+const Button = ({ vote, anecdotes, text1, text2 }) => {
   return (
     <div>
       <button onClick={vote}>{text1}</button>
@@ -19,7 +19,7 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const [selected, setSelected] = useState(0)
   const [votes, setVote] = useState(Array(anecdotes.length).fill(0))
 
@@ -32,8 +32,8 @@ const App = () => {
 
   const handleSelected = () => {
     const length = Math.floor(Math.random() * anecdotes.length)
-      console.log(length)
-      setSelected(length)
+    console.log(length)
+    setSelected(length)
   }
   const handleVote = () => {
     const currentVote = (currentVote) => {
@@ -51,7 +51,7 @@ const App = () => {
       <h1>Anecdote of the day</h1>
       <div>{anecdotes[selected]}</div>
       <div>has {votes[selected]} votes</div>
-      <Button vote={handleVote} text1={'vote'} anecdotes={handleSelected} text2={'next anecdote'}/>
+      <Button vote={handleVote} text1={'vote'} anecdotes={handleSelected} text2={'next anecdote'} />
       <h1>Anecdote with most vote</h1>
       <div>{anecdotes[maxIndex]}</div>
       <div>has {maxVotes} votes</div>
