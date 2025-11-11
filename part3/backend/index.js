@@ -141,7 +141,7 @@ app.post('/api/persons', (req, res) => {
     };
     contacts = contacts.concat(newObject);
 
-    res.status(201).end();
+    res.status(201).json(newObject);
     winston.info(`'POST api/persons' - name:${name} is created sucessfully`);
   } catch (error) {
     res.status(500).end();
