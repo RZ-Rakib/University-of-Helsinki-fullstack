@@ -4,7 +4,10 @@ const winston = require('./loggers');
 const morgan = require('morgan');
 const app = express();
 
+// middlewares
 app.use(express.json());
+
+app.use(express.static('dist'));
 
 app.use(
   cors({
