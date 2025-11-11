@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const winston = require('./loggers');
 const morgan = require('morgan');
 const app = express();
@@ -8,12 +7,6 @@ const app = express();
 app.use(express.json());
 
 app.use(express.static('dist'));
-
-app.use(
-  cors({
-    origin: 'http://localhost:5174',
-  })
-);
 
 app.use(morgan('combined'));
 
